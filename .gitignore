@@ -1,0 +1,20 @@
+# .NET build output and local development files
+**/bin/
+**/obj/
+.vs/
+.vscode/
+*.user
+*.suo
+
+# Release builds
+dist/
+
+# Local game logs and generated packages
+*.log
+*.zip
+*.7z
+*.bundle
+
+# Keep game and loader assemblies out of this source repository
+*.dll
+*.pdb
