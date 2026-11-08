@@ -30,7 +30,7 @@ public sealed class TreacherousChestsPlugin : BaseUnityPlugin
 {
     internal const string PluginId = "umbra.treacherouschests";
     internal const string PluginName = "Treacherous Chests";
-    internal const string PluginVersion = "0.1.0";
+    internal const string PluginVersion = "0.1.1";
 
     private const float SwapDelaySeconds = 1f;
     private const float SpawnDelaySeconds = 0.5f;
@@ -48,7 +48,6 @@ public sealed class TreacherousChestsPlugin : BaseUnityPlugin
 
     private ConfigEntry<bool> modEnabled = null!;
     private ConfigEntry<int> chancePercent = null!;
-    private ConfigEntry<int> goldChancePercent = null!;
     private ConfigEntry<int> maxPerFloor = null!;
     private ConfigEntry<bool> firstChestSafe = null!;
     private ConfigEntry<bool> bossFloor = null!;
@@ -68,10 +67,8 @@ public sealed class TreacherousChestsPlugin : BaseUnityPlugin
         instance = this;
         modEnabled = Config.Bind("General", "Enabled", true, "Master switch.");
         chancePercent = Config.Bind("Mimics", "ChancePercent", 15, new ConfigDescription(
-            "The chance, in percent, that an ordinary treasure chest is a Mimic. Each chest is checked once, when a hero opens it.",
+            "The chance, in percent, that a treasure chest is a Mimic. Each chest is checked once, when a hero opens it.",
             new AcceptableValueRange<int>(0, 100)));
-        goldChancePercent = Config.Bind("Mimics", "GoldChestChancePercent", 30, new ConfigDescription(
-            "The same for gold treasure chests: richer, and more often a Mimic.", new AcceptableValueRange<int>(0, 100)));
         maxPerFloor = Config.Bind("Mimics", "MaxPerFloor", 1, new ConfigDescription(
             "The most Mimics on one floor.", new AcceptableValueRange<int>(0, 10)));
         firstChestSafe = Config.Bind("Mimics", "FirstChestSafe", true,
@@ -95,7 +92,7 @@ public sealed class TreacherousChestsPlugin : BaseUnityPlugin
         harmony.Patch(
             AccessTools.Method(typeof(InteractEventHandler), nameof(InteractEventHandler.BeforeResponse)),
             postfix: new HarmonyMethod(typeof(TreacherousChestsPlugin), nameof(InteractBeforeResponsePostfix)));
-        Logger.LogInfo($"{PluginName} {PluginVersion} loaded: Mimic chance {chancePercent.Value}% (gold chests {goldChancePercent.Value}%), " +
+        Logger.LogInfo($"{PluginName} {PluginVersion} loaded: Mimic chance {chancePercent.Value}%, " +
             $"difficulty {difficulty.Value}.");
     }
 
@@ -178,8 +175,8 @@ public sealed class TreacherousChestsPlugin : BaseUnityPlugin
                 return;
             }
 
-            var gold = interactable.type == Interactable.Type.ChestGold;
-            if (interactable.type != Interactable.Type.Chest && !gold)
+            // Treasure chests only: other chest-like pieces (gold, water bottle, vortex dust) do not look like chests in the game.
+            if (interactable.type != Interactable.Type.Chest)
             {
                 return;
             }
@@ -197,9 +194,9 @@ public sealed class TreacherousChestsPlugin : BaseUnityPlugin
                 return;
             }
 
-            var chance = gold ? self.goldChancePercent.Value : self.chancePercent.Value;
+            var chance = self.chancePercent.Value;
             var roll = Rng.Next(100);
-            self.Logger.LogInfo($"Chest {chest.networkID} ({(gold ? "gold" : "plain")}) opened: rolled {roll} against {chance}%.");
+            self.Logger.LogInfo($"Chest {chest.networkID} opened: rolled {roll} against {chance}%.");
             if (roll >= chance)
             {
                 return;

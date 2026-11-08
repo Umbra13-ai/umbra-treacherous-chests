@@ -6,7 +6,7 @@ Only the host needs the mod. Guests, including players on standalone Quest, join
 
 ## Features
 
-- **Mimic chests:** each treasure chest has a chance to be a Mimic, decided when a hero opens it. Gold chests are richer and riskier.
+- **Mimic chests:** each treasure chest has a chance to be a Mimic, decided when a hero opens it.
 - **No free loot:** a Mimic chest hands out nothing when opened. The reward comes from beating the Mimic.
 - **The hoard:** defeating a Mimic gives cards from a reward pool, to the hero who landed the killing blow or to every hero.
 - **Fair play:** at most one Mimic per floor by default, and the first chest opened on each floor is always safe. Mimics appear only on dungeon floors, never in the entrance room or shops, and on the boss floor only if you allow it.
@@ -28,8 +28,7 @@ Everything is in `BepInEx\config\umbra.treacherouschests.cfg`, created on first 
 
 - **General:** the master switch.
 - **Mimics:**
-  - `ChancePercent`: plain chests, default 15
-  - `GoldChestChancePercent`: gold chests, default 30
+  - `ChancePercent`: default 15
   - `MaxPerFloor`: default 1
   - `FirstChestSafe`: default true
   - `BossFloor`: default false
