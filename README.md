@@ -4,7 +4,7 @@ A BepInEx mod for Demeo: some treasure chests are Mimics. Open the wrong one and
 
 Only the host needs the mod. Guests, including players on standalone Quest, join without installing anything.
 
-> **Testing build.** This is an early version made for testing. It has had little play so far, so expect rough edges. Problems and ideas are welcome as GitHub issues.
+> **Testing build.** This is an early version made for testing. It has had little play so far, so expect rough edges. Problems and ideas are welcome as GitHub issues. Once it works well, it is planned to be folded into [Umbra Revolutions](https://github.com/Umbra13-ai/umbra-revolutions).
 
 ## Features
 
